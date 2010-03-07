@@ -18,6 +18,11 @@ installed RubyGem. The man page must be included with the gem -
 For an introduction to man pages, see `man(1)` (or type `man man` in
 your shell).
 
+For information on authoring man pages, see `ron(7)`:
+
+    gem install ron
+    gem man 7 ron
+
 ## GEM
 
 `gem man` expects to be passed the name of an installed gem. If there
@@ -90,6 +95,6 @@ Sanderson.
 
 ## SEE ALSO
 
-ron(5), man(1), less(1), roff(7), groff(1),
+ron(7), man(1), less(1), roff(7), groff(1),
 <http://en.wikipedia.org/wiki/Man_page>,
 <http://github.com/defunkt/gem-man>
