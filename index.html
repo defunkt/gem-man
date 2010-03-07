@@ -82,6 +82,14 @@ installed RubyGem. The man page must be included with the gem -
 <p>For an introduction to man pages, see <code>man(1)</code> (or type <code>man man</code> in
 your shell).</p>
 
+<h2>QUICKSTART</h2>
+
+<pre><code>gem install gem-man
+gem man gem-man
+</code></pre>
+
+<p>Metalicious.</p>
+
 <h2>GEM</h2>
 
 <p><code>gem man</code> expects to be passed the name of an installed gem. If there
@@ -143,6 +151,14 @@ gem man 1 ron
 gem man -a
 </code></pre>
 
+<h2>AUTHORING</h2>
+
+<p>For information on authoring man pages, see <a href="http://rtomayko.github.com/ron/"><code>ron(7)</code></a>:</p>
+
+<pre><code>gem install ron
+gem man 7 ron
+</code></pre>
+
 <h2>BUGS</h2>
 
 <p>Requires the <code>man(1)</code> script to be in your path, executable, and to
@@ -167,7 +183,7 @@ Sanderson.</p>
 
 <h2>SEE ALSO</h2>
 
-<p>ron(5), man(1), less(1), roff(7), groff(1),
+<p>ron(7), man(1), less(1), roff(7), groff(1),
 <a href="http://en.wikipedia.org/wiki/Man_page">http://en.wikipedia.org/wiki/Man_page</a>,
 <a href="http://github.com/defunkt/gem-man">http://github.com/defunkt/gem-man</a></p>
 
