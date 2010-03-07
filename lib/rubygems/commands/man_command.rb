@@ -67,7 +67,8 @@ class Gem::Commands::ManCommand < Gem::Command
       end
 
       # Try to read manpages.
-      read_manpage(get_spec(name), section)
+      spec = get_spec(name) { |s| s.has_manpage?(section) }
+      read_manpage(spec, section)
     end
   end
 
@@ -100,21 +101,21 @@ class Gem::Commands::ManCommand < Gem::Command
     File.join(spec.installation_path, "gems", spec.full_name)
   end
 
-  def get_spec(name)
+  def get_spec(name, &block)
     dep = Gem::Dependency.new(name, options[:version])
     specs = Gem.source_index.search(dep)
 
-    if block_given?
-      specs = specs.select { |spec| yield spec}
+    if block
+      specs = specs.select { |spec| yield spec }
     end
 
     if specs.length == 0
       # If we have not tried to do a pattern match yet, fall back on it.
       if !options[:exact] && !name.is_a?(Regexp)
         pattern = /#{Regexp.escape name}/
-        get_spec(pattern)
+        get_spec(pattern, &block)
       else
-        say "#{name.inspect} is not available"
+        say "Can't find any manpages for '#{name.inspect}"
         nil
       end
     elsif specs.length == 1 || options[:latest]
