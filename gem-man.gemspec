@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name              = "gem-man"
-  s.version           = "0.1.0"
+  s.version           = "0.1.1"
   s.date              = "2010-03-06"
   s.summary           = "View a gem's man page."
   s.homepage          = "http://github.com/defunkt/gem-man"
