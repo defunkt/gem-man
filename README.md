@@ -90,7 +90,7 @@ accept a full path to a manual.
 
 Requires Ruby and RubyGems 1.3.2 (or higher).
 
-Please report other bugs at <http://github.com/defunkt/gem-man>
+Please report other bugs at <http://github.com/defunkt/gem-man/issues>
 
 ## THANKS
 
