@@ -6,14 +6,23 @@ class Gem::Commands::ManCommand < Gem::Command
   include Gem::VersionOption
 
   def initialize
-    super 'man', "Open the gem's manual",
+    super 'man', "Open a gem's manual",
       :command => nil,
       :version => Gem::Requirement.default,
-      :latest  => false
+      :latest  => false,
+      :all     => false
 
+    add_all_gems_option
     add_latest_version_option
     add_version_option
     add_exact_match_option
+  end
+
+  def add_all_gems_option
+    add_option('-a', '--all',
+      'List all installed gems that have manuals.') do |value, options|
+      options[:all] = true
+    end
   end
 
   def add_latest_version_option
@@ -34,11 +43,18 @@ class Gem::Commands::ManCommand < Gem::Command
   end
 
   def execute
-    # Grab our target gem.
-    name = get_one_gem_name
+    if options[:all]
+      puts "These gems have man pages:", ''
+      Gem.source_index.gems.each do |name, spec|
+        puts "#{spec.name} #{spec.version}" if spec.has_manpage?
+      end
+    else
+      # Grab our target gem.
+      name = get_one_gem_name
 
-    # Try to read manpages.
-    read_manpage get_spec(name) { |s| s.has_manpage? }
+      # Try to read manpages.
+      read_manpage get_spec(name) { |s| s.has_manpage? }
+    end
   end
 
   def read_manpage(spec)
