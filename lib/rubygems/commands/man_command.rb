@@ -1,12 +1,12 @@
 # Much of this is stolen from the `open_gem` RubyGem's "read"
-# command.
+# command - thanks Adam!
 #
 # http://github.com/adamsanderson/open_gem/blob/dfddaa286e/lib/rubygems/commands/read_command.rb
 class Gem::Commands::ManCommand < Gem::Command
   include Gem::VersionOption
 
   def initialize
-    super 'man', "Open the gem's manpage or rdoc",
+    super 'man', "Open the gem's manual",
       :command => nil,
       :version => Gem::Requirement.default,
       :latest  => false
@@ -30,7 +30,7 @@ class Gem::Commands::ManCommand < Gem::Command
   end
 
   def arguments
-    "GEMNAME       gem whose manpage you wanna read"
+    "GEMNAME       gem whose manual you wish to read"
   end
 
   def execute
@@ -39,30 +39,39 @@ class Gem::Commands::ManCommand < Gem::Command
 
     # Try to read manpages.
     read_manpage get_spec(name) { |s| s.has_manpage? }
-
-    # Failed. Try to read rdoc via ri.
-    read_rdoc get_spec(name) { |s| s.has_rdoc? }
   end
 
-  def read_rdoc(spec)
-    return unless path = get_path(spec)
+  def read_manpage(spec)
+    return if spec.nil?
 
-    if File.exists?(path)
-      read_gem(path)
-    elsif ask_yes_no "No RDoc. Regenerate?", true
-      generate_rdoc(spec)
-      read_gem(path)
+    paths = spec.manpages
+
+    # man/ron.1 => ron(1)
+    names = paths.map do |path|
+      path.sub(/.*\/(.+)\.(\d+)/, '\1(\2)')
+    end
+
+    if paths.size == 1
+      manpath = paths[0]
+    elsif paths.size > 1
+      name, index = choose_from_list("View which manual?", names)
+      manpath = paths[index]
+    end
+
+    if manpath
+      exec "man #{File.join(gem_path(spec), manpath)}"
+    else
+      abort "no manuals found for #{spec.name}"
     end
   end
 
-  def generate_rdoc(spec)
-    Gem::DocManager.new(spec).generate_rdoc
+  def gem_path(spec)
+    File.join(spec.installation_path, "gems", spec.full_name)
   end
 
   def get_spec(name)
     dep = Gem::Dependency.new(name, options[:version])
     specs = Gem.source_index.search(dep)
-    puts specs[0].class.inspect
 
     if block_given?
       specs = specs.select { |spec| yield spec}
@@ -80,8 +89,8 @@ class Gem::Commands::ManCommand < Gem::Command
     elsif specs.length == 1 || options[:latest]
       specs.last
     else
-      choices = specs.map{|s|"#{s.name} #{s.version}"}
-      c,i = choose_from_list "Open which gem?", choices
+      choices = specs.map { |s| "#{s.name} #{s.version}" }
+      c, i = choose_from_list "Open which gem?", choices
       specs[i] if i
     end
   end

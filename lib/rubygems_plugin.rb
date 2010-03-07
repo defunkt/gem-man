@@ -1,4 +1,6 @@
 require 'rubygems/command_manager'
+require 'rubygems/gem/specification'
+
 require 'ron'
 
 # require 'rubygems/command'
