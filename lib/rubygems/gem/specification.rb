@@ -7,7 +7,7 @@ class Gem::Specification
   # Paths to the manpages included in this gem.
   def manpages
     @files.select do |file|
-      file =~ /man\/(.+).\d+$/
+      file =~ /man\/(.+).\d$/
     end
   end
 end
