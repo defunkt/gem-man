@@ -67,6 +67,7 @@
 <h2>SYNOPSIS</h2>
 
 <pre><code>gem man &lt;GEM&gt;
+gem man &lt;SECTION&gt; &lt;GEM&gt;
 gem man --latest &lt;GEM&gt;
 gem man --exact &lt;GEM&gt;
 gem man --all
@@ -90,6 +91,14 @@ displayed.</p>
 
 <p>Man pages are any files whose extension is a single digit [0-9],
 e.g. <code>ron.1</code>.</p>
+
+<h2>SECTION</h2>
+
+<p>Specifying a <code>SECTION</code> as the first argument narrows the search to man
+pages matching the provided section. For example, if the "mustache"
+gem includes <code>man/mustache.1</code> and <code>man/mustache.5</code> the command <code>gem
+man 1 mustache</code> will display <code>man/mustache.1</code> without asking if you'd
+like to see <code>man/mustache.5</code>.</p>
 
 <h2>OPTIONS</h2>
 
@@ -125,6 +134,13 @@ man</code> will ask which you'd prefer.</p>
 <h2>INSTALL</h2>
 
 <pre><code>gem install gem-man
+</code></pre>
+
+<h2>EXAMPLES</h2>
+
+<pre><code>gem man mustache
+gem man 1 ron
+gem man -a
 </code></pre>
 
 <h2>BUGS</h2>

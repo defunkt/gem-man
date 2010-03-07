@@ -11,6 +11,7 @@
 .nf
 
 \fBgem man <GEM>
+gem man <SECTION> <GEM>
 gem man --latest <GEM>
 gem man --exact <GEM>
 gem man --all \fR
@@ -34,6 +35,13 @@ displayed.
 .P
 Man pages are any files whose extension is a single digit [0\-9],
 e.g. \fBron.1\fR.
+.
+.SH "SECTION"
+Specifying a \fBSECTION\fR as the first argument narrows the search to man
+pages matching the provided section. For example, if the "mustache"
+gem includes \fBman/mustache.1\fR and \fBman/mustache.5\fR the command \fBgem
+man 1 mustache\fR will display \fBman/mustache.1\fR without asking if you'd
+like to see \fBman/mustache.5\fR.
 .
 .SH "OPTIONS"
 \fBgem man\fR's default mode of operation is to open a man page for a
@@ -68,6 +76,16 @@ See \fBgem help man\fR to view the options at any time.
 .nf
 
 \fBgem install gem-man \fR
+.
+.fi
+.
+.SH "EXAMPLES"
+.
+.nf
+
+\fBgem man mustache
+gem man 1 ron
+gem man -a \fR
 .
 .fi
 .

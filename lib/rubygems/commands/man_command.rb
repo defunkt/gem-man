@@ -25,6 +25,10 @@ class Gem::Commands::ManCommand < Gem::Command
     end
   end
 
+  def usage
+    "gem man [SECTION] GEMNAME"
+  end
+
   def add_latest_version_option
     add_option('-l', '--latest',
       'If there are multiple versions, open the latest') do |value, options|
@@ -39,28 +43,39 @@ class Gem::Commands::ManCommand < Gem::Command
   end
 
   def arguments
+    "SECTION       section of the manual to search\n" +
     "GEMNAME       gem whose manual you wish to read"
   end
 
   def execute
+    if get_one_optional_argument =~ /^\d$/
+      section = get_one_optional_argument
+    end
+
     if options[:all]
       puts "These gems have man pages:", ''
       Gem.source_index.gems.each do |name, spec|
         puts "#{spec.name} #{spec.version}" if spec.has_manpage?
       end
     else
-      # Grab our target gem.
-      name = get_one_gem_name
+      # gem man 1 mustache
+      section, name, _ = options[:args]
+
+      if name.nil?
+        # gem man mustache
+        name, section = section, nil
+      end
 
       # Try to read manpages.
-      read_manpage get_spec(name) { |s| s.has_manpage? }
+      read_manpage(get_spec(name), section)
     end
   end
 
-  def read_manpage(spec)
+  def read_manpage(spec, section = nil)
     return if spec.nil?
 
-    paths = spec.manpages
+    paths = spec.manpages(section)
+    return if paths.empty?
 
     # man/ron.1 => ron(1)
     names = paths.map do |path|

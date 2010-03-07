@@ -4,6 +4,7 @@ gem-man(1) -- view a gem's man page
 ## SYNOPSIS
 
     gem man <GEM>
+    gem man <SECTION> <GEM>
     gem man --latest <GEM>
     gem man --exact <GEM>
     gem man --all
@@ -26,6 +27,14 @@ displayed.
 
 Man pages are any files whose extension is a single digit [0-9],
 e.g. `ron.1`.
+
+## SECTION
+
+Specifying a `SECTION` as the first argument narrows the search to man
+pages matching the provided section. For example, if the "mustache"
+gem includes `man/mustache.1` and `man/mustache.5` the command `gem
+man 1 mustache` will display `man/mustache.1` without asking if you'd
+like to see `man/mustache.5`.
 
 ## OPTIONS
 
@@ -53,6 +62,12 @@ See `gem help man` to view the options at any time.
 ## INSTALL
 
     gem install gem-man
+
+## EXAMPLES
+
+    gem man mustache
+    gem man 1 ron
+    gem man -a
 
 ## BUGS
 
