@@ -7,3 +7,10 @@ desc "Show the manual"
 task :man => :build_man do
   exec "man man/gem-man.1"
 end
+
+begin
+  require 'mg'
+  MG.new('gem-man.gemspec')
+rescue Loaderror
+  warn "gem install mg to get gem tasks"
+end
