@@ -26,6 +26,18 @@ installed RubyGem. The man page must be included with the gem \- \fBgem-man\fR d
 For an introduction to man pages, see \fBman(1)\fR (or type \fBman man\fR in
 your shell).
 .
+.SH "QUICKSTART"
+.
+.nf
+
+\fBgem install gem-man
+gem man gem-man \fR
+.
+.fi
+.
+.P
+Metalicious.
+.
 .SH "GEM"
 \fBgem man\fR expects to be passed the name of an installed gem. If there
 are multiple man pages found for the gem, you will be asked which
@@ -89,6 +101,20 @@ gem man -a \fR
 .
 .fi
 .
+.SH "AUTHORING"
+For information on authoring man pages, see \fI\fBron(7)\fR\fR:
+.
+.IP "" 4
+.
+.nf
+
+\fBgem install ron
+gem man 7 ron \fR
+.
+.fi
+.
+.IP "" 0
+.
 .SH "BUGS"
 Requires the \fBman(1)\fR script to be in your path, executable, and to
 accept a full path to a manual.
@@ -114,4 +140,4 @@ gem\-man is Copyright (C) 2010 Chris Wanstrath with parts from Adam
 Sanderson.
 .
 .SH "SEE ALSO"
-ron(5), man(1), less(1), roff(7), groff(1),\fIhttp://en.wikipedia.org/wiki/Man_page\fR, \fIhttp://github.com/defunkt/gem\-man\fR
+ron(7), man(1), less(1), roff(7), groff(1),\fIhttp://en.wikipedia.org/wiki/Man_page\fR, \fIhttp://github.com/defunkt/gem\-man\fR
