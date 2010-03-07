@@ -1,0 +1,102 @@
+.\" generated with Ron/v0.3
+.\" http://github.com/rtomayko/ron/
+.
+.TH "GEM\-MAN" "1" "March 2010" "DEFUNKT" "RubyGems Manual"
+.
+.SH "NAME"
+\fBgem-man\fR \-\- view a gem's man page
+.
+.SH "SYNOPSIS"
+\fBgem man\fR \fIGEM\fR
+.
+.br
+\fBgem man\fR \-\-latest \fIGEM\fR
+.
+.br
+\fBgem man\fR \-\-exact \fIGEM\fR
+.
+.br
+\fBgem man\fR \-\-list
+.
+.br
+.
+.SH "DESCRIPTION"
+The \fBgem man\fR command can be used to display a man page for an
+installed RubyGem. The man page must be included with the gem \- \fBgem-man\fR does no generation or magic.
+.
+.P
+For an introduction to man pages, see \fBman(1)\fR (or type \fBman man\fR in
+your shell).
+.
+.SH "GEM"
+\fBgem man\fR expects to be passed the name of an installed gem. If there
+are multiple man pages found for the gem, you will be asked which
+you'd like to view. If only a single man page is found it will be
+displayed.
+.
+.P
+Man pages are any files whose extension is a single digit [0\-9],
+e.g. \fBron.1\fR.
+.
+.SH "OPTIONS"
+\fBgem man\fR's default mode of operation is to open a man page for a
+single gem or, if multiple man pages are found, ask which you'd like
+to open. If there are any ambiguities as to which gem to use, \fBgem
+man\fR will ask which you'd prefer.
+.
+.P
+You can specify gems or list available gems using a few options.
+.
+.TP
+\fB-l\fR, \fB--latest\fR 
+If there are multiple versions of a gem, open the latest.
+.
+.TP
+\fB-v\fR, \fB--version\fR 
+Specify version of gem to man.
+.
+.TP
+\fB-e\fR, \fB--exact\fR 
+Only list exact matches.
+.
+.TP
+\fB-a\fR, \fB--all\fR 
+List all installed gems that have manuals.
+.
+.P
+See \fBgem help man\fR to view the options at any time.
+.
+.SH "INSTALL"
+.
+.nf
+
+\fBgem install gem-man \fR
+.
+.fi
+.
+.SH "BUGS"
+Requires the \fBman(1)\fR script to be in your path, executable, and to
+accept a full path to a manual.
+.
+.P
+Requires Ruby and RubyGems 1.3.2 (or higher).
+.
+.P
+Please report other bugs at \fIhttp://github.com/defunkt/gem\-man\fR
+.
+.SH "THANKS"
+.
+.IP "\(bu" 4
+adamsanderson for open_gem
+.
+.IP "\(bu" 4
+rtomayko for ron
+.
+.IP "" 0
+.
+.SH "COPYRIGHT"
+gem\-man is Copyright (C) 2010 Chris Wanstrath with parts from Adam
+Sanderson.
+.
+.SH "SEE ALSO"
+ron(5), man(1), less(1), roff(7), groff(1),\fIhttp://en.wikipedia.org/wiki/Man_page\fR, \fIhttp://github.com/defunkt/gem\-man\fR

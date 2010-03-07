@@ -3,10 +3,10 @@ gem-man(1) -- view a gem's man page
 
 ## SYNOPSIS
 
-`gem man` <GEM>
-`gem man` --latest <GEM>
-`gem man` --exact <GEM>
-`gem man` --list
+`gem man` <GEM>  
+`gem man` --latest <GEM>  
+`gem man` --exact <GEM>  
+`gem man` --list  
 
 ## DESCRIPTION
 
