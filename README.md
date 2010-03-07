@@ -18,10 +18,12 @@ installed RubyGem. The man page must be included with the gem -
 For an introduction to man pages, see `man(1)` (or type `man man` in
 your shell).
 
-For information on authoring man pages, see [`ron(7)`][r7]:
+## QUICKSTART
 
-    gem install ron
-    gem man 7 ron
+    gem install gem-man
+    gem man gem-man
+
+Metalicious.
 
 ## GEM
 
@@ -73,6 +75,13 @@ See `gem help man` to view the options at any time.
     gem man mustache
     gem man 1 ron
     gem man -a
+
+## AUTHORING
+
+For information on authoring man pages, see [`ron(7)`][r7]:
+
+    gem install ron
+    gem man 7 ron
 
 ## BUGS
 
