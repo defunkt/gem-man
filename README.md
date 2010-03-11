@@ -5,6 +5,7 @@ gem-man(1) -- view a gem's man page
 
     gem man <GEM>
     gem man <SECTION> <GEM>
+    gem man --system <GEM>
     gem man --latest <GEM>
     gem man --exact <GEM>
     gem man --all
@@ -52,6 +53,12 @@ man` will ask which you'd prefer.
 
 You can specify gems or list available gems using a few options.
 
+  * `-s`, `--system`:
+    Fall back to searching for system manuals. That is, `gem man -s
+    mac` will first look for a gem named `mac` with a man page before
+    looking for any system man pages named `mac`. `gem man -s fork`
+    should find the fork(2) manual, for instance.
+
   * `-l`, `--latest`:
     If there are multiple versions of a gem, open the latest.
 
@@ -82,6 +89,19 @@ For information on authoring man pages, see [`ron(7)`][r7]:
 
     gem install ron
     gem man 7 ron
+
+## CHEATING
+
+If you want `man` to find RubyGems, it's this easy:
+
+    alias man="gem man -s"
+
+Now:
+
+    man say
+    man rails
+    man 1 ronn
+    man 2 fork
 
 ## BUGS
 

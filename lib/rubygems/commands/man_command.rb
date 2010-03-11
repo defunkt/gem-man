@@ -13,9 +13,19 @@ class Gem::Commands::ManCommand < Gem::Command
       :all     => false
 
     add_all_gems_option
+    add_system_fallback_option
     add_latest_version_option
     add_version_option
     add_exact_match_option
+  end
+
+  def usage
+    "gem man [SECTION] GEMNAME"
+  end
+
+  def arguments
+    "SECTION       section of the manual to search\n" +
+    "GEMNAME       gem whose manual you wish to read"
   end
 
   def add_all_gems_option
@@ -25,8 +35,11 @@ class Gem::Commands::ManCommand < Gem::Command
     end
   end
 
-  def usage
-    "gem man [SECTION] GEMNAME"
+  def add_system_fallback_option
+    add_option('-s', '--system',
+      'Falls back to searching for system-wide man pages.') do |value, options|
+      options[:system] = true
+    end
   end
 
   def add_latest_version_option
@@ -40,11 +53,6 @@ class Gem::Commands::ManCommand < Gem::Command
     add_option('-x', '--exact', 'Only list exact matches') do |value, options|
       options[:exact] = true
     end
-  end
-
-  def arguments
-    "SECTION       section of the manual to search\n" +
-    "GEMNAME       gem whose manual you wish to read"
   end
 
   def execute
@@ -67,8 +75,13 @@ class Gem::Commands::ManCommand < Gem::Command
       end
 
       # Try to read manpages.
-      spec = get_spec(name) { |s| s.has_manpage?(section) }
-      read_manpage(spec, section)
+      if spec = get_spec(name) { |s| s.has_manpage?(section) }
+        read_manpage(spec, section)
+      elsif options[:system]
+        exec "man #{section} #{name}"
+      else
+        abort "No manual entry for #{name}"
+      end
     end
   end
 
@@ -115,7 +128,6 @@ class Gem::Commands::ManCommand < Gem::Command
         pattern = /#{Regexp.escape name}/
         get_spec(pattern, &block)
       else
-        say "Can't find any manpages for '#{name.inspect}"
         nil
       end
     elsif specs.length == 1 || options[:latest]
