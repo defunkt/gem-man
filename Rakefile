@@ -11,7 +11,7 @@ end
 begin
   require 'mg'
   MG.new('gem-man.gemspec')
-rescue Loaderror
+rescue LoadError
   warn "gem install mg to get gem tasks"
 end
 
