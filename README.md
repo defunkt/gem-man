@@ -34,7 +34,7 @@ you'd like to view. If only a single man page is found it will be
 displayed.
 
 Man pages are any files whose extension is a single digit [0-9],
-e.g. `ron.1`.
+e.g. `ronn.1`.
 
 ## SECTION
 
@@ -80,15 +80,15 @@ See `gem help man` to view the options at any time.
 ## EXAMPLES
 
     gem man mustache
-    gem man 1 ron
+    gem man 1 ronn
     gem man -a
 
 ## AUTHORING
 
-For information on authoring man pages, see [`ron(7)`][r7]:
+For information on authoring man pages, see [`ronn(7)`][r7]:
 
-    gem install ron
-    gem man 7 ron
+    gem install ronn
+    gem man 7 ronn
 
 ## CHEATING
 
@@ -115,7 +115,7 @@ Please report other bugs at <http://github.com/defunkt/gem-man/issues>
 ## THANKS
 
 * adamsanderson for open_gem
-* rtomayko for ron
+* rtomayko for ronn
 
 ## COPYRIGHT
 
@@ -124,8 +124,8 @@ Sanderson.
 
 ## SEE ALSO
 
-ron(7), man(1), less(1), roff(7), groff(1),
+ronn(7), man(1), less(1), roff(7), groff(1),
 <http://en.wikipedia.org/wiki/Man_page>,
 <http://github.com/defunkt/gem-man>
 
-[r7]: http://rtomayko.github.com/ron/
+[r7]: http://rtomayko.github.com/ronn/
