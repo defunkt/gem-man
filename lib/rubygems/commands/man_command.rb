@@ -130,7 +130,7 @@ class Gem::Commands::ManCommand < Gem::Command
       specs = specs.select { |spec| yield spec }
     end
 
-    if specs.size.zero?
+    if specs.empty?
       # If we have not tried to do a pattern match yet, fall back on it.
       if !options[:exact] && !name.is_a?(Regexp)
         pattern = /#{Regexp.escape name}/
