@@ -107,7 +107,7 @@ class Gem::Commands::ManCommand < Gem::Command
     end
 
     if manpath
-      exec "man #{File.join(gem_path(spec), manpath)}"
+      exec "man #{File.join(spec.man_dir, manpath)}"
     else
       abort "no manuals found for #{spec.name}"
     end
