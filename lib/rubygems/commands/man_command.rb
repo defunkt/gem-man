@@ -62,7 +62,10 @@ class Gem::Commands::ManCommand < Gem::Command
 
     if options[:all]
       puts "These gems have man pages:", ''
-      Gem.source_index.gems.each do |name, spec|
+
+      specs = Gem::Specification.respond_to?(:each) ? Gem::Specification : Gem.source_index.gems
+      specs.each do |*name_and_spec|
+        spec = name_and_spec.pop
         puts "#{spec.name} #{spec.version}" if spec.has_manpage?
       end
     else
@@ -104,7 +107,7 @@ class Gem::Commands::ManCommand < Gem::Command
     end
 
     if manpath
-      exec "man #{File.join(gem_path(spec), manpath)}"
+      exec "man #{File.join(spec.man_dir, manpath)}"
     else
       abort "no manuals found for #{spec.name}"
     end
@@ -115,14 +118,19 @@ class Gem::Commands::ManCommand < Gem::Command
   end
 
   def get_spec(name, &block)
-    dep = Gem::Dependency.new(name, options[:version])
-    specs = Gem.source_index.search(dep)
+    # Since Gem::Dependency.new doesn't want a Regexp
+    # We'll do it ourself!
+    specs = if Gem::Specification.respond_to?(:each)
+      Gem::Specification.each.select { |spec| name === spec.name }
+    else
+      Gem.source_index.search Gem::Dependency.new(name, options[:version])
+    end
 
     if block
       specs = specs.select { |spec| yield spec }
     end
 
-    if specs.length == 0
+    if specs.empty?
       # If we have not tried to do a pattern match yet, fall back on it.
       if !options[:exact] && !name.is_a?(Regexp)
         pattern = /#{Regexp.escape name}/
@@ -130,7 +138,7 @@ class Gem::Commands::ManCommand < Gem::Command
       else
         nil
       end
-    elsif specs.length == 1 || options[:latest]
+    elsif specs.size == 1 || options[:latest]
       specs.last
     else
       choices = specs.map { |s| "#{s.name} #{s.version}" }

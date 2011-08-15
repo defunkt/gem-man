@@ -3,16 +3,11 @@ Gem::Specification.new do |s|
   s.version           = "0.2.0"
   s.date              = "2010-03-06"
   s.summary           = "View a gem's man page."
-  s.homepage          = "http://github.com/defunkt/gem-man"
+  s.homepage          = "https://github.com/defunkt/gem-man"
   s.email             = "chris@ozmm.org"
   s.authors           = [ "Chris Wanstrath" ]
-  s.has_rdoc          = false
 
-  s.files             = %w( README.md Rakefile LICENSE )
-  s.files            += Dir.glob("lib/**/*")
-  s.files            += Dir.glob("bin/**/*")
-  s.files            += Dir.glob("man/**/*")
-  s.files            += Dir.glob("test/**/*")
+  s.files             = Dir.glob("{bin,lib,man}/**/*") + %w( README.md Rakefile LICENSE )
 
   s.description       = <<desc
   The `gem man` command can be used to display a man page for an
