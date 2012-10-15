@@ -18,8 +18,6 @@ class Gem::Specification
   # Paths to the manpages included in this gem.
 
   def manpages(section = nil)
-    Dir.entries(man_dir).select do |file|
-      file =~ /(.+).#{section || '\d'}$/
-    end
+    Dir.glob("#{man_dir}/**/*.#{section || '?'}").map {|s| s.sub(man_dir, '') }
   end
 end
