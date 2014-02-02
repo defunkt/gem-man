@@ -196,7 +196,11 @@ class Gem::Commands::ManCommand < Gem::Command
       # narrows candidates, the final comparison excludes the
       # trailing digit ([0..-2] part).
       if manpath = spec.manpages(section).find{|path| path.split(".")[0..-2].join == name}
-        SpecPage.new(spec, manpath)
+        if options[:version].specific?
+          return [SpecPage.new(spec, manpath)] if options[:version].satisfied_by?(spec.version)
+        else
+          SpecPage.new(spec, manpath)
+        end
       end
     end.compact.sort_by{|s| s.spec.version}
   end
