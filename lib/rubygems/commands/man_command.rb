@@ -17,6 +17,7 @@ class Gem::Commands::ManCommand < Gem::Command
     add_latest_version_option
     add_version_option
     add_exact_match_option
+    add_list_gem_option
   end
 
   def usage
@@ -55,6 +56,12 @@ class Gem::Commands::ManCommand < Gem::Command
     end
   end
 
+  def add_list_gem_option
+    add_option("-g", "--gem", "List manpages for a gem") do |value, options|
+      options[:gem] = true
+    end
+  end
+
   def execute
     if get_one_optional_argument =~ /^\d$/
       section = get_one_optional_argument
@@ -63,10 +70,8 @@ class Gem::Commands::ManCommand < Gem::Command
     if options[:all]
       puts "These gems have man pages:", ''
 
-      specs = Gem::Specification.respond_to?(:each) ? Gem::Specification : Gem.source_index.gems
-      specs.each do |*name_and_spec|
-        spec = name_and_spec.pop
-        puts "#{spec.name} #{spec.version}" if spec.has_manpage?
+      gems_with_manpages.each do |spec|
+        puts "#{spec.name} #{spec.version}"
       end
     else
       # gem man 1 mustache
@@ -77,15 +82,40 @@ class Gem::Commands::ManCommand < Gem::Command
         name, section = section, nil
       end
 
-      # Try to read manpages.
-      if spec = get_spec(name) { |s| s.has_manpage?(section) }
-        read_manpage(spec, section)
-      elsif options[:system]
-        exec "man #{section} #{name}"
+      if options[:gem]
+        # Try to read manpages.
+        if spec = get_spec(name) { |s| s.has_manpage?(section) }
+          read_manpage(spec, section)
+        elsif options[:system]
+          exec "man #{section} #{name}"
+        else
+          abort "No manual entry for #{name}"
+        end
       else
-        abort "No manual entry for #{name}"
+        # Search all existing specs for the given manpage
+        gems_with_manpages.each do |spec|
+          # Check if this gem has the manpage. #manpages(section)
+          # narrows candidates, the final comparison excludes the
+          # trailing digit ([0..-2] part).
+          if manpath = spec.manpages(section).find{|path| path.split(".")[0..-2].join == name}
+            exec "man #{File.join(spec.man_dir, manpath)}"
+          end
+        end
+
+        # No gemspec contains this manpage. Try system manpages
+        # if requested, otherwise fail.
+        if options[:system]
+          exec "man #{section} #{name}"
+        else
+          abort "No manual entry for #{name}"
+        end
       end
     end
+  end
+
+  def gems_with_manpages
+    specs = Gem::Specification.respond_to?(:each) ? Gem::Specification : Gem.source_index.gems
+    specs.select{|*name_and_spec| name_and_spec.pop.has_manpage?}
   end
 
   def read_manpage(spec, section = nil)
