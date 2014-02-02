@@ -1,9 +1,15 @@
+# -*- coding: utf-8 -*-
 # Much of this is stolen from the `open_gem` RubyGem's "read"
 # command - thanks Adam!
 #
 # http://github.com/adamsanderson/open_gem/blob/dfddaa286e/lib/rubygems/commands/read_command.rb
 class Gem::Commands::ManCommand < Gem::Command
   include Gem::VersionOption
+
+  # Search result struct for #get_specs_for_page. +spec+ is the
+  # Gem::Specification, +manpath+ the relative path of the manpage
+  # to the spec’s +man_dir+.
+  SpecPage = Struct.new(:spec, :manpath)
 
   def initialize
     super 'man', "Open a gem's manual",
@@ -92,22 +98,30 @@ class Gem::Commands::ManCommand < Gem::Command
           abort "No manual entry for #{name}"
         end
       else
-        # Search all existing specs for the given manpage
-        gems_with_manpages.each do |spec|
-          # Check if this gem has the manpage. #manpages(section)
-          # narrows candidates, the final comparison excludes the
-          # trailing digit ([0..-2] part).
-          if manpath = spec.manpages(section).find{|path| path.split(".")[0..-2].join == name}
-            exec "man #{File.join(spec.man_dir, manpath)}"
-          end
-        end
+        results = get_specs_for_page(name, section)
 
-        # No gemspec contains this manpage. Try system manpages
-        # if requested, otherwise fail.
-        if options[:system]
-          exec "man #{section} #{name}"
+        if results.count.zero?
+          # No gemspec contains this manpage. Try system manpages
+          # if requested, otherwise fail.
+          if options[:system]
+            exec "man #{section} #{name}"
+          else
+            abort "No manual entry for #{name}"
+          end
+        elsif results.count == 1
+          # Exactly one gemspec contains this manpage. Display.
+          exec "man #{File.join(results.first.spec.man_dir, results.first.manpath)}"
         else
-          abort "No manual entry for #{name}"
+          # Multiple gemspecs contain this manpage. Let the user choose
+          # depending on the :latest option.
+          if options[:latest]
+            i = -1 # Last ist newest
+          else
+            choices = results.map{|s| "#{s.spec.name} #{s.version}"}
+            c, i = choose_from_list "Open which gem?", choices
+          end
+
+          exec "man #{File.join(results[i].spec.man_dir, results[i].manpath)}" if i
         end
       end
     end
@@ -143,10 +157,6 @@ class Gem::Commands::ManCommand < Gem::Command
     end
   end
 
-  def gem_path(spec)
-    File.join(spec.installation_path, "gems", spec.full_name)
-  end
-
   def get_spec(name, &block)
     # Since Gem::Dependency.new doesn't want a Regexp
     # We'll do it ourself!
@@ -176,4 +186,19 @@ class Gem::Commands::ManCommand < Gem::Command
       specs[i] if i
     end
   end
+
+  # Search all existing specs for the given manpage.
+  # If requested, only search a specific section.
+  # Returns a sorted array of SpecPage instances.
+  def get_specs_for_page(name, section = nil)
+    gems_with_manpages.map do |spec|
+      # Check if this gem has the manpage. #manpages(section)
+      # narrows candidates, the final comparison excludes the
+      # trailing digit ([0..-2] part).
+      if manpath = spec.manpages(section).find{|path| path.split(".")[0..-2].join == name}
+        SpecPage.new(spec, manpath)
+      end
+    end.compact.sort_by{|s| s.spec.version}
+  end
+
 end
