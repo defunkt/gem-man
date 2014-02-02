@@ -3,9 +3,10 @@ gem-man(1) -- view a gem's man page
 
 ## SYNOPSIS
 
-    gem man <GEM>
-    gem man <SECTION> <GEM>
-    gem man --system <GEM>
+    gem man <PAGE>
+    gem man <SECTION> <PAGE>
+    gem man --gem <GEM>
+    gem man --system <PAGE>
     gem man --latest <GEM>
     gem man --exact <GEM>
     gem man --all
@@ -26,15 +27,20 @@ your shell).
 
 Metalicious.
 
-## GEM
+## PAGE
 
-`gem man` expects to be passed the name of an installed gem. If there
-are multiple man pages found for the gem, you will be asked which
-you'd like to view. If only a single man page is found it will be
-displayed.
+Name of the manual page to view. All installed gems are searched for a
+manual page named like this.
 
 Man pages are any files whose extension is a single digit [0-9],
 e.g. `ronn.1`.
+
+## GEM
+
+If `--gem` is specified, `gem man` expects to be passed the name of an
+installed gem. If there are multiple man pages found for the gem, you
+will be asked which you'd like to view. If only a single man page is
+found it will be displayed.
 
 ## SECTION
 
