@@ -7,7 +7,7 @@ gem-man(1) -- view a gem's man page
     gem man <SECTION> <PAGE>
     gem man --gem <GEM>
     gem man --system <PAGE>
-    gem man --latest <GEM>
+    gem man --latest <PAGE>
     gem man --exact <GEM>
     gem man --all
 
@@ -59,6 +59,9 @@ man` will ask which you'd prefer.
 
 You can specify gems or list available gems using a few options.
 
+  * `-g`, `--gem`:
+    Display pages in a specific gem instead of searching all gems.
+
   * `-s`, `--system`:
     Fall back to searching for system manuals. That is, `gem man -s
     mac` will first look for a gem named `mac` with a man page before
@@ -71,7 +74,7 @@ You can specify gems or list available gems using a few options.
   * `-v`, `--version`:
     Specify version of gem to man.
 
-  * `-e`, `--exact`:
+  * `-e`, `--exact` (only with `-g`):
     Only list exact matches.
 
   * `-a`, `--all`:
@@ -87,6 +90,7 @@ See `gem help man` to view the options at any time.
 
     gem man mustache
     gem man 1 ronn
+    gem man -g ronn
     gem man -a
 
 ## AUTHORING
