@@ -139,7 +139,7 @@ class Gem::Commands::ManCommand < Gem::Command
         nil
       end
     elsif specs.size == 1 || options[:latest]
-      specs.last
+      specs.first
     else
       choices = specs.map { |s| "#{s.name} #{s.version}" }
       c, i = choose_from_list "Open which gem?", choices
